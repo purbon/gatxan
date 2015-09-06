@@ -1,5 +1,3 @@
 require "gatxan/version"
-
-module Gatxan
-  # Your code goes here...
-end
+require "thor"
+require "gatxan/cli"
