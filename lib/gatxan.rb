@@ -1,3 +1,5 @@
 require "gatxan/version"
 require "thor"
+require "active_support"
+require "active_support/core_ext"
 require "gatxan/cli"

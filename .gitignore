@@ -1,7 +1,9 @@
 *.lock
 *.gem
 *.rbc
-*.yaml
+*.yml
+*.ods
+*.csv
 /.config
 /coverage/
 /InstalledFiles

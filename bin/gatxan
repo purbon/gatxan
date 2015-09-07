@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby -Ilib
 
-require "gatxan/cli"
+require "gatxan"
 Gatxan::CLI.start(ARGV)

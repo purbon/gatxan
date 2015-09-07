@@ -27,6 +27,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'faraday'
   spec.add_runtime_dependency 'jenkins_api_client'
   spec.add_runtime_dependency 'nokogiri'
-
+  spec.add_runtime_dependency 'activesupport', '~> 4.2.4'
   spec.add_runtime_dependency 'thor', '~> 0.19.1'
 end
