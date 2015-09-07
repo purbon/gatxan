@@ -1,6 +1,7 @@
 require "thor"
 require "gatxan/configuration"
 require "gatxan/commands/jenkins"
+require "gatxan/commands/github"
 
 module Gatxan
   class CLI < ::Thor
@@ -29,10 +30,9 @@ module Gatxan
     ##
     # Github related commands
     ##
-
     desc "list_repos [ORGANIZATION]", "List the repositories in a given organization"
     def list_repos(organization="")
-      raise Exception.new("Not yet implemented!")
+      Github::Commands::List.run(organization)
     end
   end
 end
