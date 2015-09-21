@@ -1,8 +1,10 @@
 # Gatxan
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/gatxan`. To experiment with that code, run `bin/console` for an interactive prompt.
+Gatxan is a CLI tool that you can use to operate on your Github organization and Jenkins infrastructure to do things like crearting jobs, updating jobs, manage project, etc.
 
-TODO: Delete this and the text above, and describe your gem
+![Gatxan_And_Arale](http://sp2.fotolog.com/photo/2/3/88/nana1985/1206963816_f.jpg)
+ 
+I use this tool for myself, but this is still __experimental__, so please use it with care! and if you are using it, report issues, problems, etc. everything is super welcome!. 
 
 ## Installation
 
