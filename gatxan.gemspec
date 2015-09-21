@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
 
   spec.add_runtime_dependency 'octokit'
+  spec.add_runtime_dependency 'git'
   spec.add_runtime_dependency 'faraday'
   spec.add_runtime_dependency 'jenkins_api_client'
   spec.add_runtime_dependency 'nokogiri'

@@ -13,6 +13,9 @@ module Gatxan
       super
     end
 
+    ##
+    # Jenkins related commands
+    ##
     desc "list_jobs [PATTERN]", "List available jobs in your configured Jenkins instance"
     def list_jobs(pattern="")
       Jenkins::Commands::List.run(pattern, Gatxan::Configuration.load_jenkins_config(destination_root))
@@ -34,6 +37,14 @@ module Gatxan
     desc "list_repos [ORGANIZATION]", "List the repositories in a given organization"
     def list_repos(organization="")
       Github::Commands::List.run(organization)
+    end
+
+    desc "check_tests", "Build a report about test quality metrics"
+    method_option :repos, :type => :array, :required => true
+    method_options :force => :boolean
+    def check_tests
+      cli_options = { :force => options.force? }
+      Github::Commands::CheckTests.run(options.repos, cli_options)
     end
 
     desc "issues_stats [ORGANIZATION]", "Give you some stats about issues in your organization repositories"
