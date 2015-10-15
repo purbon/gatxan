@@ -3,6 +3,7 @@ require "gatxan/configuration"
 require "gatxan/commands/jenkins"
 require "gatxan/commands/github"
 require "csv"
+require "json"
 
 module Gatxan
   class CLI < ::Thor
@@ -45,6 +46,16 @@ module Gatxan
     def check_tests
       cli_options = { :force => options.force? }
       Github::Commands::CheckTests.run(options.repos, cli_options)
+    end
+
+    desc "find_committers", "Build a report on contributtors"
+    method_option :repos, :type => :array, :required => true
+    method_options :force => :boolean
+    def find_committers
+      cli_options = { :force => options.force? }
+      committers, accumulated = Github::Commands::CommittersReport.run(options.repos, cli_options)
+      File.open("commiters.json", 'w') { |file| file.write(committers.to_json) }
+      File.open("accumulated.json", 'w') { |file| file.write(accumulated.to_json) }
     end
 
     desc "issues_stats [ORGANIZATION]", "Give you some stats about issues in your organization repositories"

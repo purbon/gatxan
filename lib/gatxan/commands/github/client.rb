@@ -5,6 +5,12 @@ require "fileutils"
 module GithubCI
   class Client
 
+    def self.committers(repo)
+      Octokit.contributors(repo).map do |user|
+        { 'login' => user['login'], 'contributions' => user['contributions'] }
+      end
+    end
+
     def self.repositories(organization)
       Octokit.auto_paginate = true
       repo_list = Octokit.organization_repositories(organization)
