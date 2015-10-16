@@ -52,8 +52,12 @@ module Gatxan
     method_option :repos, :type => :array, :required => true
     method_options :force => :boolean
     def find_committers
+      Gatxan::Configuration.configure_github(destination_root)
       cli_options = { :force => options.force? }
       committers, accumulated = Github::Commands::CommittersReport.run(options.repos, cli_options)
+      accumulated.reject! do |user, acc|
+        acc < 5
+      end
       File.open("commiters.json", 'w') { |file| file.write(committers.to_json) }
       File.open("accumulated.json", 'w') { |file| file.write(accumulated.to_json) }
     end
