@@ -35,7 +35,7 @@ module GithubCI
 
     def self.fetch_hooks(name, force)
       Octokit.client.hooks(name).map do |hook|
-        { "name" => hook["name"], "url" => hook["config"]["url"] }
+        { "id" => hook["id"], "name" => hook["name"], "url" => hook["config"]["url"] }
       end
     end
 
