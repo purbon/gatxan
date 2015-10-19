@@ -48,6 +48,16 @@ module Gatxan
       Github::Commands::CheckTests.run(options.repos, cli_options)
     end
 
+    desc "dump_hooks", "Dump all installed hooks for a list of repos"
+    method_option :repos, :type => :array, :required => true
+    method_options :force => :boolean
+    def dump_hooks
+      Gatxan::Configuration.configure_github(destination_root)
+      cli_options = { :force => options.force? }
+      hooks = Github::Commands::DumpHooks.run(options.repos, cli_options)
+      File.open("hooks.json", 'w') { |file| file.write(hooks.to_json) }
+    end
+
     desc "find_committers", "Build a report on contributtors"
     method_option :repos, :type => :array, :required => true
     method_options :force => :boolean

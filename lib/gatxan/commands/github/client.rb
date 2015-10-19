@@ -33,6 +33,12 @@ module GithubCI
       end.compact
     end
 
+    def self.fetch_hooks(name, force)
+      Octokit.client.hooks(name).map do |hook|
+        { "name" => hook["name"], "url" => hook["config"]["url"] }
+      end
+    end
+
     def self.committers(repo)
       Octokit.contributors(repo).map do |user|
         { 'login' => user['login'], 'contributions' => user['contributions'] }
