@@ -1,9 +1,37 @@
 require "octokit"
 require 'git'
 require "fileutils"
+require "time"
 
 module GithubCI
   class Client
+
+    EXCLUDED_USERS = [ "ycombinator", "ph", "jsvd", "electrical", "coolacid", "tbragin", "purbon", "colinsurprenant", "suyograo", "talevy",
+                       "andrewvc", "jordansissel", "untergeek", "guyboertje", "Paul Echeverri" ]
+
+    def self.dump_commits(repo, &block)
+      Octokit.auto_paginate = true
+      valid_paths = [ "lib/logstash/inputs/*", "lib/logstash/fitlers/*", "lib/logstash/codecs/*", "lib/logstash/outputs/*" ]
+      since = (Time.now-(18*30*86400)).iso8601
+      Octokit.commits(repo, "master").map do |commit|
+        begin
+          hash   = commit.to_hash
+          sha    = hash[:sha]
+          author = hash[:author][:login] rescue hash[:commit][:author][:name]
+          date   = hash[:commit][:author][:date]
+          next if EXCLUDED_USERS.include?(author)
+          details = Octokit.commit(repo, sha).to_hash
+          files   = details[:files].select do |file|
+            valid_paths.any? { |pattern| file[:filename] =~ /^#{pattern}/ }
+          end
+          next if files.empty?
+          print "."
+          block.call({sha: sha, author: author, date: date, details: files.map { |file| file[:filename] } })
+        rescue => e
+          puts e
+        end
+      end.compact
+    end
 
     def self.committers(repo)
       Octokit.contributors(repo).map do |user|

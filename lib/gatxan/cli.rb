@@ -62,6 +62,27 @@ module Gatxan
       File.open("accumulated.json", 'w') { |file| file.write(accumulated.to_json) }
     end
 
+    desc "dump_commits", "dump commits from a given repository"
+    method_option :repo, :type => :string, :required => true
+    method_options :force => :boolean
+    def dump_commits
+      Gatxan::Configuration.configure_github(destination_root)
+      cli_options = { :force => options.force? }
+      File.open("commits.json", "w") do |file|
+        events = {}
+        Github::Commands::DumpCommits.run(options.repo, cli_options) do |event|
+          event[:details].each do |detail|
+            events[detail] ||= {}
+            next if !events[detail][:date].nil? && events[detail][:date] < event[:date]
+            puts event
+            events[detail][:date]   = event[:date]
+            events[detail][:author] = event[:author]
+          end
+        end
+        file.write(events.to_json)
+      end
+    end
+
     desc "issues_stats [ORGANIZATION]", "Give you some stats about issues in your organization repositories"
     method_options :to_csv => :boolean
     def issues_stats(organization="")
