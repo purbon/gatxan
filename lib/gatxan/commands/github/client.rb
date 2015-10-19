@@ -33,6 +33,10 @@ module GithubCI
       end.compact
     end
 
+    def self.delete_hook(repo, hook, force)
+      Octokit.client.remove_hook(repo, hook["id"])
+    end
+
     def self.fetch_hooks(name, force)
       Octokit.client.hooks(name).map do |hook|
         { "id" => hook["id"], "name" => hook["name"], "url" => hook["config"]["url"] }

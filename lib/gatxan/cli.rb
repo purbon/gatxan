@@ -58,6 +58,16 @@ module Gatxan
       File.open("hooks.json", 'w') { |file| file.write(hooks.to_json) }
     end
 
+    desc "delete_hooks", "Delete a list of hooks"
+    method_option :hooks, :type => :string, :required => true
+    method_options :force => :boolean
+    def delete_hooks
+      Gatxan::Configuration.configure_github(destination_root)
+      cli_options = { :force => options.force? }
+      hooks       = JSON.parse(File.read(options.hooks))
+      Github::Commands::DeleteHooks.run(hooks, cli_options)
+    end
+
     desc "find_committers", "Build a report on contributtors"
     method_option :repos, :type => :array, :required => true
     method_options :force => :boolean
