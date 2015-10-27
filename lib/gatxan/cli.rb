@@ -27,6 +27,15 @@ module Gatxan
       raise Exception.new("Not yet implemented!")
     end
 
+    desc "copy_job", "Copy a job with a new name"
+    method_option :from, :type => :string, :required => true
+    method_option :to, :type => :string, :required => true
+    def copy_job
+      config = Gatxan::Configuration.load_jenkins_config(destination_root)
+      cmd    = Jenkins::Commands::Copy.new(config)
+      cmd.run(options.from, options.to)
+    end
+
     desc "delete_job [JOB]", "Delete a given job"
     def delete_job(job="")
       raise Exception.new("Not yet implemented!")

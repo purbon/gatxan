@@ -29,6 +29,18 @@ module JenkinsCI
       client.job.add_email_notification(params)
     end
 
+    def create_job(name, config)
+      client.job.create(name, config)
+    end
+
+    def get_config(job)
+      client.job.get_config(job)
+    end
+
+    def copy_job(job_name, new_job)
+      client.job.copy(job_name, new_job)
+    end
+
     def run_job(job_name, opts={})
       client.job.build(job_name, {}, opts)
     end
@@ -41,9 +53,35 @@ module JenkinsCI
       client.job.get_build_details(job_name, build_id)
     end
 
+    def change_project_url(doc, project_url)
+      puts "Updating the project url #{project_url}"
+      urls = doc.xpath("/project/properties/com.coravy.hudson.plugins.github.GithubProjectProperty/projectUrl/text()")
+      urls.each do |url|
+        url.content = project_url
+      end
+      doc
+    end
+
+    def change_project_name(doc, name)
+      urls = doc.xpath("/project/triggers/org.jenkinsci.plugins.ghprb.GhprbTrigger/project/text()")
+      urls.each do |url|
+        url.content = name
+      end
+      doc
+    end
+
+    def change_git_url(doc, git_url)
+      puts "Updating the git URL #{git_url}"
+      urls = doc.xpath('/project/scm/userRemoteConfigs/hudson.plugins.git.UserRemoteConfig/url/text()')
+      urls.each do |url|
+        url.content = git_url
+      end
+      doc
+    end
+
     def set_job_scheduler(job_name, timmer)
       puts "Updating #{job_name}"
-      config = client.job.get_config(job_name)
+      config = get_config(job_name)
       xml_doc  = Nokogiri::XML(config)
       add_timer(xml_doc, timmer)
       @client.job.update(job_name, xml_doc.to_s)
