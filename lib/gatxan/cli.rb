@@ -36,9 +36,11 @@ module Gatxan
       cmd.run(options.from, options.to)
     end
 
-    desc "delete_job [JOB]", "Delete a given job"
-    def delete_job(job="")
-      raise Exception.new("Not yet implemented!")
+    desc "delete_jobs", "Delete a set of jobs that match the pattern"
+    method_option :pattern, :type => :string, :required => true
+    def delete_jobs
+      config = Gatxan::Configuration.load_jenkins_config(destination_root)
+      Jenkins::Commands::Delete.run(options.pattern, config)
     end
 
     ##

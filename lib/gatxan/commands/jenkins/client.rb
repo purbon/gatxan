@@ -33,6 +33,10 @@ module JenkinsCI
       client.job.create(name, config)
     end
 
+    def delete_job(name)
+      client.job.delete(name)
+    end
+
     def get_config(job)
       client.job.get_config(job)
     end
