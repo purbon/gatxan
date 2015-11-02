@@ -29,7 +29,7 @@ module Gatxan
 
     desc "copy_job", "Copy a job with a new name"
     method_option :from, :type => :string, :required => true
-    method_option :to, :type => :string, :required => true
+    method_option :to, :type => :array, :required => true
     def copy_job
       config = Gatxan::Configuration.load_jenkins_config(destination_root)
       cmd    = Jenkins::Commands::Copy.new(config)

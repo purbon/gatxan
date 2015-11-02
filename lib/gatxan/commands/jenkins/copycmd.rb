@@ -9,18 +9,19 @@ module Gatxan
           @client = JenkinsCI::Client.new(config)
         end
 
-        def run(from, to)
-          puts "Copy #{from} to #{to}"
+        def run(from, to_jobs)
           config = @client.get_config(from)
+          to_jobs.each do |job|
+            puts "Copy #{from} to #{job}"
+            puts "Updating the configuration"
+            doc  = Nokogiri::XML(config.clone)
+            @client.change_git_url(doc, git_pattern(job))
+            @client.change_project_name(doc, project_name(job))
+            @client.change_project_url(doc, project_url(job))
 
-          puts "Updating the configuration"
-          doc  = Nokogiri::XML(config)
-          @client.change_git_url(doc, git_pattern(to))
-          @client.change_project_name(doc, project_name(to))
-          @client.change_project_url(doc, project_url(to))
-
-          puts "Creating the new job"
-          @client.create_job(project_name(to), doc.to_xml)
+            puts "Creating the new job #{job}"
+            @client.create_job(project_name(job), doc.to_xml)
+          end
         end
 
         private
