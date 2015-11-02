@@ -1,4 +1,5 @@
 *.xml
+*.list
 *.json
 *.txt
 *.lock
