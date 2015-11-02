@@ -36,7 +36,7 @@ module Gatxan
 
         def project_name(to)
           parts = to.split("-")
-          "logstash-plugin-#{parts[1]}-#{parts[2]}_PR"
+          "logstash-plugin-#{parts[1]}-#{parts[2..-1].join("-")}_PR"
         end
 
       end
